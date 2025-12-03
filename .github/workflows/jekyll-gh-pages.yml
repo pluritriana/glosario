@@ -35,12 +35,11 @@ jobs:
         with:
           source: ./
           destination: ./_site
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist/glosario
         env:
           API_KEY_GEMINIS: ${{ secrets.API_KEY_GEMINIS }}
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        
 
   # Deployment job
   deploy:
