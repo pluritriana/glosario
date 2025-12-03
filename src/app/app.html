@@ -58,7 +58,7 @@
             <select [(ngModel)]="filterSubject" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5">
               <option value="all">Todas</option>
               @for (sub of availableSubjects(); track sub) {
-                <option [value]="sub">{{ sub | uppercase }}</option>
+                <option [value]="sub">{{ sub }}</option>
               }
             </select>
           </div>
