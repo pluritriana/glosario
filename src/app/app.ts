@@ -94,7 +94,7 @@ export class App implements OnInit{
 
   // --- Computed ---
   availableSubjects = computed(() => {
-    const subs = new Set(this.terms().map(t => t.subject.toUpperCase).filter(Boolean));
+    const subs = new Set(this.terms().map(t => t.subject.toUpperCase()).filter(Boolean));
     return Array.from(subs).sort();
   });
 
