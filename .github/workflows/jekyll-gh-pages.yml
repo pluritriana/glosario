@@ -35,7 +35,6 @@ jobs:
         with:
           source: ./
           destination: ./_site
-        with:
           path: .dist/glosario
         env:
           API_KEY_GEMINIS: ${{ secrets.API_KEY_GEMINIS }}
