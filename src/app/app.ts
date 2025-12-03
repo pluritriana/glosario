@@ -150,7 +150,7 @@ export class App implements OnInit{
       const base = {
         lang: this.newTerm.lang,
         course: this.newTerm.course,
-        subject: this.newTerm.subject.toLowerCase(),
+        subject: this.newTerm.subject.toUpperCase(),
         createdAt: Date.now()
       };
       if (this.addMode() === 'single') {
