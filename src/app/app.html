@@ -250,4 +250,20 @@
     </div>
   }
 
+  @if (deleteModalOpen()) {
+        <div class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 backdrop-blur-sm" (click)="deleteModalOpen.set(false)">
+          <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 relative" (click)="$event.stopPropagation()">
+            <h3 class="text-xl font-bold text-red-600 mb-2">Borrar Término</h3>
+            <p class="text-slate-600 mb-4 text-sm">Esta acción es permanente y afectará a todos los usuarios. Introduce la contraseña para confirmar.</p>
+            
+            <input type="password" [(ngModel)]="deletePasswordInput" placeholder="Contraseña requerida" class="w-full bg-red-50 border border-red-200 rounded-lg p-3 text-red-900 mb-4 focus:outline-none focus:ring-2 focus:ring-red-500">
+            
+            <div class="flex gap-3 justify-end">
+              <button (click)="deleteModalOpen.set(false)" class="px-4 py-2 text-slate-500 hover:bg-slate-100 rounded-lg font-medium transition-colors">Cancelar</button>
+              <button (click)="confirmDelete()" class="px-4 py-2 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-colors">Borrar</button>
+            </div>
+          </div>
+        </div>
+      }
+
 </div>
