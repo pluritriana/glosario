@@ -88,6 +88,10 @@ export class App implements OnInit{
   loadingQuiz = signal(false);
   quizResult = signal<string>('');
 
+  deleteModalOpen = signal(false);
+  termToDeleteId = signal<string | null>(null);
+  deletePasswordInput = signal('');
+
   // --- Computed ---
   availableSubjects = computed(() => {
     const subs = new Set(this.terms().map(t => t.subject).filter(Boolean));
@@ -119,7 +123,7 @@ export class App implements OnInit{
   }
 
   loadData(uid: string) {
-    const q = collection(db, 'artifacts', appId, 'users', uid, 'glossary_terms');
+    const q = collection(db, 'artifacts', appId, 'public', 'data', 'glossary_terms');
     onSnapshot(q, (snapshot) => {
       const data = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as Term));
       this.terms.set(data.sort((a, b) => b.createdAt - a.createdAt));
@@ -142,7 +146,7 @@ export class App implements OnInit{
     this.saving.set(true);
 
     try {
-      const col = collection(db, 'artifacts', appId, 'users', this.user()!.uid, 'glossary_terms');
+      const col = collection(db, 'artifacts', appId, 'public', 'data', 'glossary_terms');
       const base = {
         lang: this.newTerm.lang,
         course: this.newTerm.course,
@@ -175,9 +179,27 @@ export class App implements OnInit{
     }
   }
 
-  async handleDelete(id: string) {
-    if (confirm('¿Borrar?')) {
-      await deleteDoc(doc(db, 'artifacts', appId, 'users', this.user()!.uid, 'glossary_terms', id));
+  handleDelete(id: string) {
+    this.termToDeleteId.set(id);
+    this.deletePasswordInput.set('');
+    this.deleteModalOpen.set(true);
+  }
+
+  async confirmDelete() {
+    if (this.deletePasswordInput() !== ADMIN_PASSWORD) {
+      alert('⚠️ Contraseña incorrecta');
+      return;
+    }
+
+    if (this.termToDeleteId()) {
+      try {
+        await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'glossary_terms', this.termToDeleteId()!));
+        this.deleteModalOpen.set(false);
+        this.termToDeleteId.set(null);
+      } catch (e) {
+        console.error(e);
+        alert('Error al borrar');
+      }
     }
   }
 
