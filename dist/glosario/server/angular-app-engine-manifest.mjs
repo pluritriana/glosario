@@ -1,6 +1,6 @@
 
 export default {
-  basePath: '/',
+  basePath: '/glosario',
   supportedLocales: {
   "en-US": ""
 },
