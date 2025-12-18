@@ -34,7 +34,7 @@ jobs:
         env:
           API_KEY_GEMINIS: ${{ secrets.API_KEY_GEMINIS }}
         # Este comando configura la URL base automáticamente para GitHub Pages
-        run: npm run build -- --configuration production --base-href /${{ github.event.repository.name }}/
+        run: npm run build -- --configuration production --base-href /glosario/
 
       # 5. Crear archivo .nojekyll para evitar errores de carga de estilos
       - name: Create .nojekyll file
@@ -44,5 +44,5 @@ jobs:
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: dist/glosario/browser
+          folder: dist/glosario/
           branch: gh-pages
