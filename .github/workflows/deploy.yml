@@ -24,7 +24,7 @@ jobs:
 
       - name: Inyectar Secretos
         run: |
-          sed -i "s|API_KEY_GEMINIS|${{ secrets.API_KEY_GEMINIS }}|g" src/environments/environment.prod.ts
+          sed -i "s|VALOR_A_REEMPLAZAR|${{ secrets.API_KEY_GEMINIS }}|g" src/environments/environment.prod.ts
 
       - name: Build de la aplicación
         run: npx ng build --configuration production --base-href /glosario/
@@ -35,4 +35,5 @@ jobs:
           folder: dist/glosario/browser
 
           branch: gh-pages
+
 
