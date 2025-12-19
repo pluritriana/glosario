@@ -24,9 +24,14 @@ jobs:
 
       - name: Inyectar Secretos
         run: |
-          sed -i "s|VALOR_A_REEMPLAZAR|${{ secrets.API_KEY_GEMINIS }}|g" src/environments/environment.prod.ts
-          sed -i "s|VALOR_A_REEMPLAZAR|${{ secrets.API_KEY_GEMINIS }}|g" src/environments/environment.ts
-          grep "apiKey" src/environments/environment.ts
+          mkdir -p src/environments
+          # Creamos los dos archivos con la clave del secreto
+          echo "export const environment = { production: true, apiKey: '${{ secrets.API_KEY_GEMINIS }}' };" > src/environments/environment.ts
+          echo "export const environment = { production: true, apiKey: '${{ secrets.API_KEY_GEMINIS }}' };" > src/environments/environment.prod.ts
+          
+          echo "Archivos de configuración generados."
+          # Verificación de seguridad en el log
+          cat src/environments/environment.ts | grep "apiKey"
 
       - name: Build de la aplicación
         run: npx ng build --configuration production --base-href /glosario/
@@ -37,6 +42,7 @@ jobs:
           folder: dist/glosario/browser
 
           branch: gh-pages
+
 
 
 
