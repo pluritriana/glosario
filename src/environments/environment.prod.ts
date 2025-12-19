@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiKey: 'API_KEY_GEMINIS'
+  apiKey: 'VALOR_A_REEMPLAZAR'
 };
