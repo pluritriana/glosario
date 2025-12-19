@@ -3,6 +3,7 @@ import { Component, OnInit, OnDestroy, computed, signal, effect, inject } from '
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { bootstrapApplication } from '@angular/platform-browser';
+import { environment } from '../environments/environment.prod';
 
 
 // --- Firebase Imports ---
@@ -35,7 +36,7 @@ const firebaseConfig = {
   appId: "1:786251394798:web:7e1e08242743c53f218dff",
   measurementId: "G-HJGVEZQ8K1"
 };
-const apiKeyGeminis = "";
+const apiKeyGeminis = environment.apiKey;
 const ADMIN_PASSWORD = "Triana0??";
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);

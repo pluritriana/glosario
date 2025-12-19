@@ -1,16 +1,20 @@
-# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
-
-# Compiled output
+# --- Angular & Compiled Output ---
+/dist
 /tmp
 /out-tsc
 /bazel-out
+/.angular/cache
 
-# Node
+# --- Secretos y Entornos (IMPORTANTE) ---
+# Ignora el archivo de entorno local si contiene claves reales
+# src/environments/environment.ts 
+
+# --- Node.js ---
 /node_modules
 npm-debug.log
 yarn-error.log
 
-# IDEs and editors
+# --- IDEs y Editores ---
 .idea/
 .project
 .classpath
@@ -27,8 +31,7 @@ yarn-error.log
 !.vscode/extensions.json
 .history/*
 
-# Miscellaneous
-/.angular/cache
+# --- Miscellaneous ---
 .sass-cache/
 /connect.lock
 /coverage
@@ -37,6 +40,6 @@ testem.log
 /typings
 __screenshots__/
 
-# System files
+# --- System files ---
 .DS_Store
 Thumbs.db
