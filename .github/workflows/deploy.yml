@@ -3,7 +3,7 @@ name: Deploy Angular a GitHub Pages
 on:
   push:
     branches:
-      - main  # Se ejecuta cada vez que subes algo a la rama  main
+      - main  # Se ejecuta cada vez que subes algo a la rama main
 
 jobs:
   build-and-deploy:
@@ -42,6 +42,7 @@ jobs:
           folder: dist/glosario/browser
 
           branch: gh-pages
+
 
 
 
