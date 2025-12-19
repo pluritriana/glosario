@@ -234,7 +234,8 @@ export class App implements OnInit{
     }
     this.loadingQuiz.set(true);
     const sample = this.filteredTerms().slice(0, 10).map(t => `${t.term} (${t.translation})`).join(', ');
-    const p = `Crea un quiz HTML de 3 preguntas basado en: ${sample}. Formato: <div><strong>Pregunta</strong><ul><li>Opciones</li></ul><details><summary>Ver respuesta</summary>Respuesta...</details></div>`;
+    //const p = `Crea un quiz HTML de 3 preguntas basado en: ${sample}. Formato: <div><strong>Pregunta</strong><ul><li>Opciones</li></ul><details><summary>Ver respuesta</summary>Respuesta...</details></div>`;
+    const p = `Actúa como un profesor de idiomas experto y generador de contenido web. Crea un quiz de 10 preguntas de vocabulario para estos términos: ${sample} .Requisitos técnicos: Entrega el resultado exclusivamente en código HTML (sin bloques de código de programación, solo las etiquetas <div>, <h3>, <p>, <ul>, etc.). Usa una estructura limpia: Título del quiz en <h2>, cada pregunta dentro de un <div> con clase 'pregunta', y las opciones en una lista desordenada <ul>. El formato debe ser 'rellenar huecos' (____) con opciones A, B y C. Estructura del contenido: Las 10 preguntas primero. Una línea separadora <hr>. Una sección final con las respuestas correctas y una breve explicación para cada una.`
     const res = await this.generateContent(p);
     this.quizResult.set(res);
     this.loadingQuiz.set(false);
