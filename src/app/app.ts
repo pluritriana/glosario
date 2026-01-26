@@ -276,53 +276,37 @@ export class App implements OnInit {
 
   async handleTTS(text: string, lang: string) {
     try {
-      const voice = lang === 'fr' ? 'Fenrir' : 'Kore';
-      const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKeyGeminis}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [{ parts: [{ text }] }],
-            generationConfig: {
-              responseModalities: ['AUDIO'],
-              speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: voice } } },
-            },
-          }),
-        },
-      );
+      // Llamada a tu propio backend en Vercel
+      const res = await fetch('https://gemini-backend-lime.vercel.app/api/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, lang }), // Enviamos texto e idioma
+      });
 
-      const d = await res.json();
+      const audioData = await res.json();
 
-      if (!res.ok) {
-        // En caso de error (e.g. cuota excedida), hacemos fallback al navegador
-        console.warn('Gemini TTS Error (Quota/API):', d);
+      if (!res.ok || !audioData || !audioData.data) {
+        console.warn('Error en el backend de TTS:', audioData);
         this.fallbackTTS(text, lang);
         return;
       }
 
-      const part = d.candidates?.[0]?.content?.parts?.[0];
-      const audioData = part?.inlineData;
+      // Procesamiento del audio (tu lógica original)
+      const mimeType = audioData.mimeType || '';
+      const rateMatch = mimeType.match(/rate=(\d+)/);
+      const sampleRate = rateMatch ? parseInt(rateMatch[1], 10) : 24000;
 
-      if (audioData) {
-        // Detectar Sample Rate automáticamente de la respuesta (e.g. "audio/L16; rate=24000")
-        const mimeType = audioData.mimeType || '';
-        const rateMatch = mimeType.match(/rate=(\d+)/);
-        const sampleRate = rateMatch ? parseInt(rateMatch[1], 10) : 24000; // Fallback a 24000 si no se encuentra
+      console.log(`Reproduciendo audio desde backend a ${sampleRate}Hz`);
 
-        console.log(`Reproduciendo audio a ${sampleRate}Hz`);
+      const binary = atob(audioData.data);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
 
-        const binary = atob(audioData.data);
-        const bytes = new Uint8Array(binary.length);
-        for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-
-        const wav = this.pcmToWav(bytes, sampleRate);
-        const audio = new Audio(URL.createObjectURL(wav));
-        audio.play();
-      }
+      const wav = this.pcmToWav(bytes, sampleRate);
+      const audio = new Audio(URL.createObjectURL(wav));
+      audio.play();
     } catch (e) {
       console.error('TTS System Error:', e);
-      // Fallback también en caso de error de red
       this.fallbackTTS(text, lang);
     }
   }
