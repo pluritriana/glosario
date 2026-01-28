@@ -245,9 +245,9 @@ export class App implements OnInit {
     const p =
       "Define muy resumido el término '" +
       term.term +
-      "' en el idioma, es decir, la respuesta en el idioma " +
+      "' en el idioma: " +
       term.lang +
-      ' para un estudiante de ' +
+      ' (en significa inglés, y fr significa frances) para un estudiante de ' +
       term.subject +
       ' del curso ' +
       term.course +
