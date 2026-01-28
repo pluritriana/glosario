@@ -242,16 +242,24 @@ export class App implements OnInit {
     this.modalOpen.set(true);
     this.loadingAI.set(true);
     console.log(term.lang);
-    const p =
-      "Define muy resumido el término '" +
-      term.term +
-      "' en el idioma: " +
-      term.lang +
-      ' (en significa inglés, y fr significa frances) para un estudiante de ' +
-      term.subject +
-      ' del curso ' +
-      term.course +
-      '. HTML simple (<h3>, <p>, <br>).';
+
+    const langMap: Record<string, string> = {
+      en: 'Inglés',
+      fr: 'Francés',
+    };
+
+    const langText = langMap[term.lang] ?? term.lang;
+
+    const p = `
+Define briefly the term "${term.term}" in ${langText}.
+The explanation is for a ${term.course} student studying ${term.subject}.
+Use clear and simple language.
+
+Format:
+- Simple HTML only (<h3>, <p>, <br>)
+- One short paragraph (max 3–4 lines)
+- No lists, no emojis, no extra text
+`;
     const txt = await this.generateContent(p);
     this.modalContent.set(txt);
     this.loadingAI.set(false);
