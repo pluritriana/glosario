@@ -243,9 +243,9 @@ export class App implements OnInit {
     this.loadingAI.set(true);
     console.log(term.lang);
     const p =
-      "Define muy resumido '" +
+      "Define muy resumido el término '" +
       term.term +
-      "' en el idioma " +
+      "' en el idioma, es decir, la respuesta en el idioma " +
       term.lang +
       ' para un estudiante de ' +
       term.subject +

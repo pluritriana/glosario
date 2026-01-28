@@ -50,7 +50,7 @@
             <select [(ngModel)]="filterLang" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5">
               <option value="all">Todos</option>
               <option value="en">EN Inglés</option>
-              <option value="fr">🇫🇷 Francés</option>
+              <option value="fr">FR Francés</option>
             </select>
           </div>
           <div>
@@ -95,7 +95,7 @@
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             @for (term of filteredTerms(); track term.id) {
               <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 hover:shadow-md transition-all relative group">
-                <button (click)="handleDelete(term.id)" class="absolute top-4 right-4 text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button (click)="handleDelete(term.id)" class="absolute top-4 right-4 text-slate-300 hover:text-red-500 opacity-1 group-hover:opacity-100 transition-opacity">
                   <!-- Icono Trash -->
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
                 </button>
