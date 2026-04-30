@@ -50,6 +50,7 @@ interface Term {
   lang: string;
   course: string;
   subject: string;
+  topic: string;
   createdAt: number;
 }
 
@@ -65,17 +66,39 @@ export class App implements OnInit {
   terms = signal<Term[]>([]);
   activeTab = signal<'glosario' | 'practica' | 'add'>('glosario');
 
+  constructor() {
+    // LISTADO: cuando cambia asignatura filtro → reset tema
+    effect(() => {
+      const subject = this.filterSubject();
+      if (subject) {
+        this.filterTopic.set('all');
+      }
+    });
+
+    // AÑADIR: cuando cambia asignatura → reset tema y modo nuevo tema
+    effect(() => {
+      const subject = this.newTerm.subject;
+
+      if (subject) {
+        this.newTerm.topic = '';
+        this.isNewTopic.set(false);
+      }
+    });
+  }
+
   // Filtros
   filterLang = signal('all');
   filterCourse = signal('all');
   filterSubject = signal('all');
+  filterTopic = signal('all');
   searchTerm = signal('');
 
   // Añadir
   addMode = signal<'single' | 'bulk'>('single');
-  newTerm = { term: '', translation: '', lang: 'en', course: '1eso', subject: '' };
+  newTerm = { term: '', translation: '', lang: 'en', course: '1eso', subject: '', topic: '' };
   bulkText = signal('');
   isNewSubject = signal(false);
+  isNewTopic = signal(false);
   passwordInput = signal('');
   saving = signal(false);
 
@@ -100,15 +123,38 @@ export class App implements OnInit {
     return Array.from(subs).sort();
   });
 
+  availableTopicsForSubject = computed(() => {
+    const selectedSub = this.filterSubject();
+    if (!selectedSub) return [];
+
+    // Filtramos los términos que ya tienen esta asignatura para ver sus temas
+    const topics = this.terms()
+      .filter((t) => t.subject.toLowerCase() === selectedSub.toLowerCase())
+      .map((t) => t.topic);
+
+    return [...new Set(topics)].filter((tp) => !!tp).sort();
+  });
+
+  getTopicsForSubject(subject: string) {
+    if (!subject) return [];
+
+    const topics = this.terms()
+      .filter((t) => t.subject.toLowerCase() === subject.toLowerCase())
+      .map((t) => t.topic);
+
+    return [...new Set(topics)].filter(Boolean).sort();
+  }
+
   filteredTerms = computed(() => {
     const s = this.searchTerm().toLowerCase();
     return this.terms().filter((t) => {
       const matchLang = this.filterLang() === 'all' || t.lang === this.filterLang();
       const matchCourse = this.filterCourse() === 'all' || t.course === this.filterCourse();
       const matchSubject = this.filterSubject() === 'all' || t.subject === this.filterSubject();
+      const matchTopic = this.filterTopic() === 'all' || t.topic === this.filterTopic();
       const matchSearch =
         t.term.toLowerCase().includes(s) || t.translation.toLowerCase().includes(s);
-      return matchLang && matchCourse && matchSubject && matchSearch;
+      return matchLang && matchCourse && matchSubject && matchTopic && matchSearch;
     });
   });
 
@@ -140,6 +186,15 @@ export class App implements OnInit {
     }
   }
 
+  checkNewTopic(event: any) {
+    if (event.target.value === 'new') {
+      this.isNewTopic.set(true);
+      this.newTerm.topic = '';
+    } else {
+      this.isNewTopic.set(false);
+    }
+  }
+
   async handleSave() {
     if (this.passwordInput() !== ADMIN_PASSWORD) {
       alert('⚠️ Contraseña incorrecta');
@@ -154,6 +209,7 @@ export class App implements OnInit {
         lang: this.newTerm.lang,
         course: this.newTerm.course,
         subject: this.newTerm.subject.toUpperCase(),
+        topic: this.newTerm.topic.toLocaleUpperCase(),
         createdAt: Date.now(),
       };
       if (this.addMode() === 'single') {
